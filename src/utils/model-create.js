@@ -1,9 +1,9 @@
-const { Pokemon, Spawn, Evolution } = require("./models-create");
+const { Pokemon, Spawn, Evolution } = require("./models");
 
-function createModels() {
-    Pokemon.sync({ force: true });
-    Spawn.sync({ force: true });
-    Evolution.sync({ force: true });
+async function createModels() {
+    await Pokemon.sync({ force: true });
+    await Spawn.sync({ force: true });
+    await Evolution.sync({ force: true });
 }
 
-module.exports = createModels
+createModels();
