@@ -1,5 +1,10 @@
+const { PG_HOST, PG_DATABASE, PG_USER, PG_PASSWORD }= require("../config");
 const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = new Sequelize('sqlite::memory:');
+
+const sequelize = new Sequelize(PG_DATABASE, PG_USER, PG_PASSWORD, {
+    storage: PG_HOST,
+    dialect: 'postgres'
+});
 
 const Pokemon = sequelize.define('pokemon', {
     pokemon_id: {
@@ -28,7 +33,7 @@ const Spawn = sequelize.define('spawn', {
     },
     location: DataTypes.STRING,
     cord: DataTypes.STRING,
-    dsp: DataTypes.TIME,
+    dsp: DataTypes.DATE,
     candy: DataTypes.INTEGER,
     xl_candy: DataTypes.INTEGER,
     dust: DataTypes.INTEGER,
