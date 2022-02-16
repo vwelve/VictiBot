@@ -14,7 +14,8 @@ readdirSync('./src/interactions').forEach(name => {
     interactions.set(interaction.name, interaction.run);
     commands.push({
         name: interaction.name,
-        description: interaction.description
+        description: interaction.description,
+        options: interaction.options
     });
 
     console.log(`Loaded ${interaction.name} interaction.`);
@@ -44,10 +45,25 @@ client.on('ready', async () => {
 });
   
 client.on('interactionCreate', async interaction => {
-    if (!interaction.isCommand()) return;
+    if (interaction.isCommand()) {
+        let cmd = interactions.get(interaction.commandName);
+        cmd(interaction);
+    }
+});
 
-    let cmd = interactions.get(interaction.commandName);
-    cmd(interaction);
+client.on('messageCreate', async msg => {
+    //if (!npInputFeeds.includes(`<#${groupId}>`)) {
+    //    let input = message.content.match(/(?<==\s).*/gm);
+    //    if (!input || input.length < 7) return;
+    //    const dataFields = ["species", "emoji", "frm", "gndr", "prcnt", "idv", "ldvl", "cdp", "cty", "cntry", "flg", "mvs", "crds", "dsp", "source"];
+    /*    const inputPokeData = {};
+        dataFields.forEach(field=>{
+            const fieldDataMatch = message.content.match(new RegExp(`(?<=${field} = ).*`));
+            inputPokeData[field] = fieldDataMatch?fieldDataMatch[0]:null;
+        });
+        if (!isGoodNP(inputPokeData)) return;
+        main.broadcastReducer(inputPokeData, null, true);
+    }*/
 });
   
 client.login(DISCORD_TOKEN);
