@@ -9,16 +9,14 @@ const interactions = new Map();
 const commands = [];
 
 readdirSync('./src/interactions').forEach(name => {
-    let interaction = require(`./interactions/${name}`);
+    let { data, run } = require(`./interactions/${name}`);
 
-    interactions.set(interaction.name, interaction.run);
-    commands.push({
-        name: interaction.name,
-        description: interaction.description,
-        options: interaction.options
-    });
+    if (data) {
+        interactions.set(data.name, run);
+        commands.push(data);
 
-    console.log(`Loaded ${interaction.name} interaction.`);
+        console.log(`Loaded ${data.name} interaction.`);
+    }
 });
 
 const registerSlashCommands = async () => {
