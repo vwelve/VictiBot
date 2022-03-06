@@ -6,7 +6,7 @@ const sequelize = new Sequelize(PG_DATABASE, PG_USER, PG_PASSWORD, {
     dialect: 'postgres'
 });
 
-const league = Sequelize.ENUM("GL", "LC", "ML", "UL")
+const league = Sequelize.ENUM("GL", "LC", "ML", "UL", "ANY")
 //const broadcast_type = Sequelize.ENUM("main", "partner", "pheonix_r1", "pheonix_r2", "hub_r1", "nonpvp")
 const stream_type = Sequelize.ENUM("input", "broadcast")
 
@@ -120,7 +120,19 @@ const Evolution = sequelize.define('evolution', {
     ]
 });
 
-const Stream = sequelize.define('stream', {
+const Input = sequelize.define('stream', {
+    stream_id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true
+    },
+    channel_id: {
+        type: DataTypes.STRING,
+        unique: true
+    }
+});
+
+const Broadcast = sequelize.define('broadcast', {
     stream_id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
@@ -132,18 +144,14 @@ const Stream = sequelize.define('stream', {
     league: {
         type: league,
         allowNull: true
-    },
-    stream_type: {
-        type: stream_type,
-        allowNull: false
     }
 }, {
     indexes: [
         {
             unique: true,
-            fields: ['channel_id', 'league', 'stream_type']
+            fields: ['channel_id', 'league']
         }
     ]
 });
 
-module.exports = { Pokemon, Spawn, Evolution, Stream }
+module.exports = { Pokemon, Spawn, Evolution, Input, Broadcast }
